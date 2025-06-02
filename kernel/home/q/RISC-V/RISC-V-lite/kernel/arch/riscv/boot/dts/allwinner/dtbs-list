@@ -1,0 +1,8 @@
+arch/riscv/boot/dts/allwinner/sun20i-d1-dongshan-nezha-stu.dtb
+arch/riscv/boot/dts/allwinner/sun20i-d1-lichee-rv-86-panel-480p.dtb
+arch/riscv/boot/dts/allwinner/sun20i-d1-lichee-rv-86-panel-720p.dtb
+arch/riscv/boot/dts/allwinner/sun20i-d1-lichee-rv-dock.dtb
+arch/riscv/boot/dts/allwinner/sun20i-d1-lichee-rv.dtb
+arch/riscv/boot/dts/allwinner/sun20i-d1-mangopi-mq-pro.dtb
+arch/riscv/boot/dts/allwinner/sun20i-d1-nezha.dtb
+arch/riscv/boot/dts/allwinner/sun20i-d1s-mangopi-mq.dtb
