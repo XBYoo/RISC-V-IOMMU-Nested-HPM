@@ -1,0 +1,73 @@
+Subject: [PATCH RFC v2 0/10] RISC-V IOMMU HPM and nested IOMMU support
+From: Zong Li <zong.li@sifive.com>
+Date: Fri, 14 Jun 2024 22:21:46 +0800
+Message-Id: <20240614142156.29420-1-zong.li@sifive.com>
+To: joro@8bytes.org, will@kernel.org, robin.murphy@arm.com, tjeznach@rivosinc.com, paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu, jgg@ziepe.ca, kevin.tian@intel.com, linux-kernel@vger.kernel.org, iommu@lists.linux.dev, linux-riscv@lists.infradead.org
+Cc: Zong Li <zong.li@sifive.com>
+List-Id: <linux-kernel.vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+
+This series includes RISC-V IOMMU hardware performance monitor and
+nested IOMMU support. It also introduces more operations, which are
+required for nested IOMMU, such as g-stage flush and iotlb_sync_map.
+
+This patch needs an additional patch from Robin Murphy to support
+MSIs through nested domains (e.g., patch 09/10).
+
+This patch set is implemented on top of the RISC-V IOMMU v7 series [1],
+and tested on top of more features support [2] with some suggestions
+[3]. This patch serie will be submitted as an RFC until the RISC-V
+IOMMU has been merged.
+
+Changes from v1:
+- Rebase on RISC-V IOMMU v7 series
+- Include patch for supporting MSIs through nested domains
+- Iterate bond list for g-stage flush
+- Use data structure instead of passing individual parameters
+- PMU: adds IRQ_ONESHOT and SHARED flags for shared wired interrupt
+- PMU: add mask of counter
+- hw_info: remove unused check
+- hw_info: add padding in data structure
+- hw_info: add more comments for data structure
+- cache_invalidate_user: remove warning message from userspace
+- cache_invalidate_user: lock a riscv iommu device in riscv iommu domain
+- cache_invalidate_user: link pass through device to s2 domain's bond
+  list
+
+[1] link: https://lists.infradead.org/pipermail/linux-riscv/2024-June/055413.html
+[2] link: https://github.com/tjeznach/linux/tree/riscv_iommu_v7-rc2
+[3] link: https://lists.infradead.org/pipermail/linux-riscv/2024-June/055426.html
+
+Robin Murphy (1):
+  iommu/dma: Support MSIs through nested domains
+
+Zong Li (9):
+  iommu/riscv: add RISC-V IOMMU PMU support
+  iommu/riscv: support HPM and interrupt handling
+  iommu/riscv: use data structure instead of individual values
+  iommu/riscv: add iotlb_sync_map operation support
+  iommu/riscv: support GSCID and GVMA invalidation command
+  iommu/riscv: support nested iommu for getting iommu hardware
+    information
+  iommu/riscv: support nested iommu for creating domains owned by
+    userspace
+  iommu/riscv: support nested iommu for flushing cache
+  iommu:riscv: support nested iommu for get_msi_mapping_domain operation
+
+ drivers/iommu/dma-iommu.c        |  18 +-
+ drivers/iommu/riscv/Makefile     |   3 +-
+ drivers/iommu/riscv/iommu-bits.h |  23 ++
+ drivers/iommu/riscv/iommu-pmu.c  | 479 ++++++++++++++++++++++++++++++
+ drivers/iommu/riscv/iommu.c      | 492 ++++++++++++++++++++++++++++++-
+ drivers/iommu/riscv/iommu.h      |   8 +
+ include/linux/iommu.h            |   4 +
+ include/uapi/linux/iommufd.h     |  46 +++
+ 8 files changed, 1054 insertions(+), 19 deletions(-)
+ create mode 100644 drivers/iommu/riscv/iommu-pmu.c
+
+-- 
+2.17.1
+
+
