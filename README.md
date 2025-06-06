@@ -12,4 +12,4 @@ this project provides a minimal setup for building and running the RISC-V Linux 
 
 # result
 
-![result](/home/q/RISC-V/result-1.2.png) 
+![result](./result-1.2.png) 
